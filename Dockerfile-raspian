@@ -1,0 +1,11 @@
+FROM resin/rpi-raspbian:stretch-20180228
+
+RUN apt-get update -y && \
+    apt-get install -y git make && \
+    curl -L https://git.io/n-install | bash -s -- -y && \
+    source /root/.bashrc && \
+    n 8.9.4
+
+ADD . /app
+WORKDIR /app
+CMD ["node", "index.js"]
