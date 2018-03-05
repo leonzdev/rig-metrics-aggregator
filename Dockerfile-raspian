@@ -9,7 +9,7 @@ RUN apt-get update -y && \
     curl -L https://git.io/n-install | bash -s -- -y && \
     . /root/.bashrc && \
     n 8.9.4 && \
-    npm install
+    npm install && \
+    chmod +x /app/start.sh
 
-ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["node", "index.js"]
+ENTRYPOINT ["/app/start.sh"]
