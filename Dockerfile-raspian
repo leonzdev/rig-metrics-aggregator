@@ -6,7 +6,7 @@ WORKDIR /app
 RUN apt-get update -y && \
     apt-get install -y git make && \
     curl -L https://git.io/n-install | bash -s -- -y && \
-    source /root/.bashrc && \
+    . /root/.bashrc && \
     n 8.9.4 && \
     npm install
 
