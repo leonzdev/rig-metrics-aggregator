@@ -1,0 +1,13 @@
+[Unit]
+Description=Rig Metrics Aggragation service
+After=network.target docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a rig-metrics-aggregator
+ExecStop=/usr/bin/docker stop -t 60  rig-metrics-aggregator
+TimeoutStartSec=120
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target
