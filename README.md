@@ -8,3 +8,8 @@ export RIG_0_HOST=<rig ip or hostname>
 export RIG_0_PORT=<xmrstak port>
 node index.js
 ```
+
+* Docker
+
+  * Raspbian: https://hub.docker.com/r/leonzdev/rig-metrics-aggregator-raspbian/
+  
