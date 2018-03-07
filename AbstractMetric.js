@@ -43,8 +43,16 @@ module.exports = class AbstractMetric {
         this.send();
     }
 
+    setClient(clients) {
+        this.clients = clients;
+    }
+
     send () {
-        for (let client of this.clients) {
+        this.sendWithClients(this.clients);
+    }
+
+    sendWithClients(clients) {
+        for (let client of clients) {
             client.sendMetric({
                 name: this.name,
                 labels: this.labels,

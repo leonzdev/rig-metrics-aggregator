@@ -1,8 +1,8 @@
 const fetch = require('node-fetch');
 
-module.exports = class XmrstakStatusFetcher {
+module.exports = class HardwareStatusFetcher {
     constructor({host, port}) {
-        this.url = `http://${host}:${port}/api.json`;
+        this.url = `http://${host}:${port}`;
     }
 
     async getStatus () {

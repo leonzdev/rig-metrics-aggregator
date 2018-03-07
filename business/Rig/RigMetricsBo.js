@@ -1,54 +1,47 @@
 const RigStatusFetcher = require('./RigStatusFetcher');
-const ThreadHashrate = require('./Metric/ThreadHashrate');
-const MinerErrorCount = require('./Metric/MinerErrorCount');
-
-const API_JSON_PATH = 'api.json';
-const DEFAULT_RIG_STATUS_PORT = 80;
+const XmrstakStatusBo = require('./XmrstakStatusBo');
+const HardwareStatusBo = require('./HardwareStatusBo');
 
 module.exports = class RigMetricsBo {
-    constructor({rigName, host, port, metricClients}) {
+    constructor({rigName, host, xmrstakPort, openhwPort, metricClients}) {
         if (!Array.isArray(metricClients)) {
             throw new Error('MetricClients has to be an array.');
         }
+        _validateConstructorInputs({xmrstakPort, openhwPort});
         this.rigName = rigName;
         this.host = host;
-        this.port = port ? port : DEFAULT_RIG_STATUS_PORT;
         this.metricClients = metricClients;
-        this.rigStatus = undefined;
 
-        this.rigStatusFetcher = new RigStatusFetcher({
-            rigName: this.rigName,
-            url: `http://${host}:${port}/${API_JSON_PATH}`
+        this.xmrstakBo = new XmrstakStatusBo({
+            rigName, host, port: xmrstakPort
+        });
+        this.openhwBo = new HardwareStatusBo({
+            rigName, host, port: openhwPort
         });
     }
 
-    async collectAndSendMetrics () {
-        const rigStatus = await this.rigStatusFetcher.getStatus();
-        if (rigStatus) {
-            if (rigStatus.hashrate && rigStatus.hashrate.threads) {
-                const threadHashrates = rigStatus.hashrate.threads;
-                for (let i = 0; i < threadHashrates.length; i++) {
-                    const threadHashrateGauge = new ThreadHashrate({
-                        minerName: this.rigName,
-                        threadId: i,
-                        clients: this.metricClients
-                    });
-                    threadHashrateGauge.sendValue(threadHashrates[i][0]);
-                }
-            }
+    _validateConstructorInputs({xmrstakPort, openhwPort}) {
+        if (!xmrstakPort) {
+            throw new Error('xmrstakPort cannot be null or 0');
+        }
+        if (!openhwPort) {
+            throw new Error('openhwPort cannot be null or 0');
+        }
+        if (xmrstakPort === openhwPort) {
+            throw new Error(`xmrstakPort=${xmrstakPort} and openhwPort=${openhwPort} must be different`);
+        }
+    }
 
-            if (rigStatus.results) {
-                if (rigStatus.results.error_log) {
-                    for (let error of rigStatus.results.error_log) {
-                        const errorCounter = new MinerErrorCount({
-                            minerName: this.rigName,
-                            errorText: error.text,
-                            clients: this.metricClients
-                        });
-                        errorCounter.sendValue(error.count);
-                    }
-                }
-            }
+    async collectAndSendMetrics () {
+        const metrics = [];
+        // collect
+        metrics.push(await this.xmrstakBo.collectMetrics());
+        metrics.push(await this.openhwBo.collectMetrics());
+
+        // send
+        for (let metric of metrics) {
+            metric.setClients(this.metricClients);
+            metric.send();
         }
     }
 };
