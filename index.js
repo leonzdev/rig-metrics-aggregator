@@ -11,7 +11,8 @@ const appInsightsClient = new AppInsightsClient(appInsightsCfg);
 const rigs = rigCfg.map(rig => new RigMetricsBo({
     rigName: rig.name,
     host: rig.host,
-    port: rig.port,
+    xmrstakPort: rig.xmrstakPort,
+    openhwPort: rig.openhwPort,
     metricClients: [
         appInsightsClient
     ]

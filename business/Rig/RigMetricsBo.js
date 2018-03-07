@@ -12,21 +12,20 @@ module.exports = class RigMetricsBo {
         this.host = host;
         this.metricClients = metricClients;
 
-        this.xmrstakBo = new XmrstakStatusBo({
-            rigName, host, port: xmrstakPort
-        });
-        this.openhwBo = new HardwareStatusBo({
-            rigName, host, port: openhwPort
-        });
+        if (xmrstakPort) {
+            this.xmrstakBo = new XmrstakStatusBo({
+                rigName, host, port: xmrstakPort
+            });
+        }
+
+        if (openhwPort) {
+            this.openhwBo = new HardwareStatusBo({
+                rigName, host, port: openhwPort
+            });
+        }
     }
 
     _validateConstructorInputs({xmrstakPort, openhwPort}) {
-        if (!xmrstakPort) {
-            throw new Error('xmrstakPort cannot be null or 0');
-        }
-        if (!openhwPort) {
-            throw new Error('openhwPort cannot be null or 0');
-        }
         if (xmrstakPort === openhwPort) {
             throw new Error(`xmrstakPort=${xmrstakPort} and openhwPort=${openhwPort} must be different`);
         }
@@ -35,8 +34,12 @@ module.exports = class RigMetricsBo {
     async collectAndSendMetrics () {
         const metrics = [];
         // collect
-        metrics.push(await this.xmrstakBo.collectMetrics());
-        metrics.push(await this.openhwBo.collectMetrics());
+        if (this.xmrstakBo) {
+            metrics.push(await this.xmrstakBo.collectMetrics());
+        }
+        if (this.openhwBo) {
+            metrics.push(await this.openhwBo.collectMetrics());
+        }
 
         // send
         for (let metric of metrics) {
