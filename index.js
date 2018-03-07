@@ -17,7 +17,7 @@ const rigs = rigCfg.map(rig => new RigMetricsBo({
     ]
 }));
 const worker = new Worker({rigs});
-const job = schedule.scheduleJob('0 * * * * *', worker.work.bind(worker));
+const job = schedule.scheduleJob('0 */10 * * * *', worker.work.bind(worker));
 
 process.on('SIGINT', () => {
     job.cancel();
