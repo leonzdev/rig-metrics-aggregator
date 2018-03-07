@@ -43,7 +43,7 @@ module.exports = class AbstractMetric {
         this.send();
     }
 
-    setClient(clients) {
+    setClients(clients) {
         this.clients = clients;
     }
 

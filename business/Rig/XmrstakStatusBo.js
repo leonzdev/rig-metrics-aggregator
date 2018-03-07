@@ -26,7 +26,7 @@ module.exports = class XmrstakStatusBo {
             }
 
             if (status.results) {
-                if (rigStatus.results.error_log) {
+                if (status.results.error_log) {
                     for (let error of status.results.error_log) {
                         const errorCounter = new MinerErrorCount({
                             minerName: this.rigName,

@@ -4,6 +4,10 @@ module.exports = class Worker {
     }
 
     async work() {
-        await Promise.all(this.rigs.map(rigBo => rigBo.collectAndSendMetrics()));
+        try {
+            await Promise.all(this.rigs.map(rigBo => rigBo.collectAndSendMetrics()));
+        } catch (e) {
+            console.error(e);
+        }
     }
 }

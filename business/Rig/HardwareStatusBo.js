@@ -9,6 +9,7 @@ module.exports = class HardwareStatusBo {
     }
 
     async collectMetrics() {
+        console.log('openhwBo.collectMetrics');
         const status = await this.fetcher.getStatus();
         // parse status
         const metrics = [];
@@ -17,9 +18,10 @@ module.exports = class HardwareStatusBo {
             const gpus = status.filter(s => s.HardwareType === 5);
             for (let gpu of gpus) {
                 const gfxId = gpu.Identifier;
-                if (gpu.sensors) {
-                    const fanRpmSensor = gpu.sensors.find(s => s.SensorType === 4);
-                    const temperatureSensor = gpu.sensors.find(s => s.SensorType === 2);
+                if (gpu.Sensors) {
+                    const sensors = gpu.Sensors;
+                    const fanRpmSensor = sensors.find(s => s.SensorType === 4);
+                    const temperatureSensor = sensors.find(s => s.SensorType === 2);
 
                     if (fanRpmSensor) {
                         const fanRpm = new GfxFanRpm({
@@ -36,7 +38,7 @@ module.exports = class HardwareStatusBo {
                             gfxId
                         });
                         temperature.setValue(temperatureSensor.Value);
-                        metrics.push(fanRpm);
+                        metrics.push(temperature);
                     }
                 }
             }

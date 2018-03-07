@@ -1,4 +1,3 @@
-const RigStatusFetcher = require('./RigStatusFetcher');
 const XmrstakStatusBo = require('./XmrstakStatusBo');
 const HardwareStatusBo = require('./HardwareStatusBo');
 
@@ -7,7 +6,7 @@ module.exports = class RigMetricsBo {
         if (!Array.isArray(metricClients)) {
             throw new Error('MetricClients has to be an array.');
         }
-        _validateConstructorInputs({xmrstakPort, openhwPort});
+        RigMetricsBo._validateConstructorInputs({xmrstakPort, openhwPort});
         this.rigName = rigName;
         this.host = host;
         this.metricClients = metricClients;
@@ -25,7 +24,7 @@ module.exports = class RigMetricsBo {
         }
     }
 
-    _validateConstructorInputs({xmrstakPort, openhwPort}) {
+    static _validateConstructorInputs({xmrstakPort, openhwPort}) {
         if (xmrstakPort === openhwPort) {
             throw new Error(`xmrstakPort=${xmrstakPort} and openhwPort=${openhwPort} must be different`);
         }
@@ -35,10 +34,10 @@ module.exports = class RigMetricsBo {
         const metrics = [];
         // collect
         if (this.xmrstakBo) {
-            metrics.push(await this.xmrstakBo.collectMetrics());
+            metrics.push(...await this.xmrstakBo.collectMetrics());
         }
         if (this.openhwBo) {
-            metrics.push(await this.openhwBo.collectMetrics());
+            metrics.push(...await this.openhwBo.collectMetrics());
         }
 
         // send
