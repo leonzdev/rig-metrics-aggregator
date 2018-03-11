@@ -6,6 +6,7 @@ export APP_INSIGHTS_INS_KEY=<instrumentationKey>
 export RIG_0_NAME=<rig name>
 export RIG_0_HOST=<rig ip or hostname>
 export RIG_0_PORT=<xmrstak port>
+export NICEHASH_0_ADDRESS=<nicehash address>
 node index.js
 ```
 
@@ -22,6 +23,7 @@ node index.js
     -e RIG_0_NAME=<name> \
     -e RIG_0_HOST=<host> \
     -e RIG_0_PORT=<port> \
+    -e NICEHASH_0_ADDRESS=<address> \
     leonzdev/rig-metrics-aggregator-raspbian:latest
 
   # Add service file
