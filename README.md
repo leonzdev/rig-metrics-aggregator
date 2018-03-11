@@ -22,7 +22,8 @@ node index.js
     -e APP_INSIGHTS_INS_KEY=<key> \
     -e RIG_0_NAME=<name> \
     -e RIG_0_HOST=<host> \
-    -e RIG_0_PORT=<port> \
+    -e RIG_0_XMRSTAK_PORT=<port> \
+    -e RIG_0_OPENHW_PORT=<port> \
     -e NICEHASH_0_ADDRESS=<address> \
     leonzdev/rig-metrics-aggregator-raspbian:latest
 
