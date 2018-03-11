@@ -1,8 +1,8 @@
 module.exports = class AbstractMetric {
-    constructor ({name, labels, clients}) {
+    constructor ({name, labels, clients, value}) {
         this.name = name;
         this.labels = labels ? labels : {};
-        this.value = undefined;
+        this.value = value;
         this.clients = [];
         if (clients) {
             if (!Array.isArray(clients)) {
