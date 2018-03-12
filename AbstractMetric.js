@@ -9,7 +9,9 @@ module.exports = class AbstractMetric {
             }
             this.clients = clients;
         }
-        this.setValue(value);
+        if (value !== null && typeof value !== 'undefined') {
+            this.setValue(value);
+        }
     }
 
     setLabel ({name, value}) {
