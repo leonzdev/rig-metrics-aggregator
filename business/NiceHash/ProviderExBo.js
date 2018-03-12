@@ -23,7 +23,7 @@ module.exports = class ProviderExBo {
                     metrics.push(new AlgoProfitability({
                         address: this.address,
                         algorithmId,
-                        value: profitability
+                        value: parseFloat(profitability)
                     }));
                 }
 
@@ -36,7 +36,7 @@ module.exports = class ProviderExBo {
                         metrics.push(new AlgoBalance({
                             address: this.address,
                             algorithmId,
-                            value: balance
+                            value: parseFloat(balance)
                         }));
                     }
 
@@ -46,7 +46,7 @@ module.exports = class ProviderExBo {
                                 address: this.address,
                                 algorithmId,
                                 speedType,
-                                value: speeds[speedType]
+                                value: parseFloat(speeds[speedType])
                             }));
                         }
                     }
