@@ -2,6 +2,13 @@ const ProviderExFetcher = require('./ProviderExFetcher');
 const AlgoBalance = require('./Metric/AlgoBalance');
 const AlgoProfitability = require('./Metric/AlgoProfitability');
 const AlgoSpeed = require('./Metric/AlgoSpeed');
+const SPEED_AMP = {
+    'KH': 1000,
+    'MH': 1000 * 1000,
+    'GH': 1000 * 1000 * 1000
+};
+const DEFAULT_SPEED_AMP = 1000;
+const BALANCE_AMP = 100000000; // Satoshi
 
 module.exports = class ProviderExBo {
     constructor ({address}) {
@@ -18,12 +25,14 @@ module.exports = class ProviderExBo {
             for (const algoResult of currentResults) {
                 const algorithmId = algoResult.algo;
                 const profitability = algoResult.profitability;
+                const speedSuffix = algoResult.suffix;
+                const speedAmp = SPEED_AMP[speedSuffix] ? SPEED_AMP[speedSuffix] : DEFAULT_SPEED_AMP;
 
                 if (typeof profitability !== 'undefined') {
                     metrics.push(new AlgoProfitability({
                         address: this.address,
                         algorithmId,
-                        value: parseFloat(profitability)
+                        value: parseFloat(profitability) * BALANCE_AMP
                     }));
                 }
 
@@ -36,7 +45,7 @@ module.exports = class ProviderExBo {
                         metrics.push(new AlgoBalance({
                             address: this.address,
                             algorithmId,
-                            value: parseFloat(balance)
+                            value: parseFloat(balance) * BALANCE_AMP
                         }));
                     }
 
@@ -46,7 +55,7 @@ module.exports = class ProviderExBo {
                                 address: this.address,
                                 algorithmId,
                                 speedType,
-                                value: parseFloat(speeds[speedType])
+                                value: parseFloat(speeds[speedType]) * speedAmp
                             }));
                         }
                     }
