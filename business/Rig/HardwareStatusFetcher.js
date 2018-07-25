@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 const OPTS = {
-    timeout: 30
+    timeout: 30000
 };
 
 module.exports = class HardwareStatusFetcher {
