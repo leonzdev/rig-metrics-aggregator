@@ -19,7 +19,7 @@ module.exports = class HardwareStatusBo {
             if (status) {
                 const gpus = status.filter(s => s.HardwareType === 5);
                 for (let gpu of gpus) {
-                    const gfxId = gpu.Identifier;
+                    const gfxId = gpu.BusNumber;
                     if (gpu.Sensors) {
                         const sensors = gpu.Sensors;
                         const fanRpmSensor = sensors.find(s => s.SensorType === 4);
