@@ -19,6 +19,7 @@ node index.js
   ```shell
   # Create a container
   sudo docker create --name=rig-metrics-aggregator \
+    -e SCHEDULE="0 */2 * * * *" \
     -e APP_INSIGHTS_INS_KEY=<key> \
     -e RIG_0_NAME=<name> \
     -e RIG_0_HOST=<host> \
